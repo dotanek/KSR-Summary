@@ -1,7 +1,10 @@
 package view;
 
+import database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import javax.xml.crypto.Data;
 
 public class Main extends Application {
 
@@ -16,7 +19,9 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(String[] args){
+        //launch(args);
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        databaseConnection.connect();
     }
 }
