@@ -1,4 +1,4 @@
-package fuzzy;
+package fuzzy.membership;
 
 public class TriangularFunction extends MembershipFunction {
     private double left;
@@ -22,5 +22,14 @@ public class TriangularFunction extends MembershipFunction {
         } else {
             return 1.0;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TriangularFunction{" +
+                "left=" + left +
+                ", apex=" + apex +
+                ", right=" + right +
+                '}';
     }
 }

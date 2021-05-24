@@ -1,10 +1,10 @@
 package view;
 
-import database.DatabaseConnection;
+import database.DataInitialization;
+import database.DataLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import javax.xml.crypto.Data;
+import org.json.JSONObject;
 
 public class Main extends Application {
 
@@ -21,7 +21,12 @@ public class Main extends Application {
 
     public static void main(String[] args){
         //launch(args);
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        databaseConnection.connect();
+        String dataPath = System.getProperty("user.dir") + "\\data";
+        DataLoader dataLoader = new DataLoader(dataPath);
+        JSONObject jsonParams = dataLoader.loadMembershipParams();
+        DataInitialization.initializeLinguisticVariables(jsonParams);
+        DataInitialization.initializeAbsoluteQuantifiers(jsonParams);
+        //DatabaseConnection databaseConnection = new DatabaseConnection();
+        //databaseConnection.connect();
     }
 }

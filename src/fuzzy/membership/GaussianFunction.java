@@ -1,4 +1,4 @@
-package fuzzy;
+package fuzzy.membership;
 
 public class GaussianFunction extends MembershipFunction {
 
@@ -13,5 +13,13 @@ public class GaussianFunction extends MembershipFunction {
     @Override
     public double getMembership(double value) {
         return (Math.exp(-Math.pow((value - apex)/spread,2)/2));
+    }
+
+    @Override
+    public String toString() {
+        return "GaussianFunction{" +
+                "apex=" + apex +
+                ", spread=" + spread +
+                '}';
     }
 }

@@ -1,5 +1,9 @@
 package fuzzy;
 
+import fuzzy.membership.MembershipFunction;
+import fuzzy.universe.Universe;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Label {
@@ -14,27 +18,46 @@ public class Label {
     }
 
     public double getMembership(double value) {
-        return 0.0;
+        return membershipFunction.getMembership(value);
     }
 
     public List<Double> getSupport() {
-        return null;
+        return getAlphaCut(0.0);
     }
 
     public List<Double> getAlphaCut(double threshold) {
-        return null;
+        List<Double> cut = new ArrayList<>();
+        for (double value : universe.getValues()) {
+            if (membershipFunction.getMembership(value) > threshold) {
+                cut.add(value);
+            }
+        }
+        return cut;
     }
 
     public double getHeight() {
-        return 0.0;
+        double max = 0.0;
+        for (double value : universe.getValues()) {
+            double membership = membershipFunction.getMembership(value);
+            if (membership > max) {
+                max = membership;
+            }
+        }
+        return max;
     }
 
-    public List<Double> getCompliment() {
-        return null;
+    public List<Double> getComplement() {
+        List<Double> complement = new ArrayList<>();
+        for (double value : universe.getValues()) {
+            if (membershipFunction.getMembership(value) == 0.0) {
+                complement.add(value);
+            }
+        }
+        return complement;
     }
 
     public boolean isEmpty() {
-        return false;
+        return getHeight() == 0.0;
     }
 
     public boolean isConvex() {
@@ -42,7 +65,7 @@ public class Label {
     }
 
     public boolean isNormal() {
-        return false;
+        return getHeight() == 1.0;
     }
 
     public static List<Double> intersection(Label l1, Label l2) {
