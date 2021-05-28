@@ -8,8 +8,8 @@ import fuzzy.membership.TrapezoidalFunction;
 import fuzzy.membership.TriangularFunction;
 import fuzzy.quantifier.AbsoluteQuantifier;
 import fuzzy.quantifier.Quantifier;
-import fuzzy.universe.DenseUniverse;
-import fuzzy.universe.DiscretteUniverse;
+//import fuzzy.universe.DenseUniverse;
+//import fuzzy.universe.DiscretteUniverse;
 import fuzzy.universe.Universe;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,7 +67,7 @@ public class DataInitialization {
 
             quantifiers.add(new AbsoluteQuantifier(lName,label));
         }
-        int a = 0;
+
         return quantifiers;
     }
 
@@ -103,12 +103,14 @@ public class DataInitialization {
         Universe universe = null;
         double left = jsonUniverse.getInt("Left");
         double right = jsonUniverse.getInt("Right");
+        double step = jsonUniverse.getDouble("Step");
+        universe = new Universe(left,right,step);
 
-        if (jsonUniverse.getBoolean("Discrette")) {
+        /*if (jsonUniverse.getBoolean("Discrette")) {
             universe = new DiscretteUniverse(left,right,1.0);
         } else {
             universe = new DenseUniverse(left,right,0.1);
-        }
+        }*/
 
         return universe;
     }

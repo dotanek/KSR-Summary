@@ -11,7 +11,24 @@ public class LinguisticVariable {
         this.labels = labels;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+
     public Label getLabel(double value) {
-        return null;
+        Label topLabel= null;
+        double topMembership = Double.NEGATIVE_INFINITY;
+        for (Label label : labels) {
+            double currentMembership = label.getMembership(value);
+            if (topMembership < currentMembership) {
+                topLabel = label;
+                topMembership = currentMembership;
+            }
+        }
+        return topLabel;
     }
 }

@@ -2,7 +2,7 @@ package fuzzy.universe;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class DenseUniverse extends Universe {
     private double left;
     private double right;
@@ -24,3 +24,4 @@ public class DenseUniverse extends Universe {
         return values;
     }
 }
+*/

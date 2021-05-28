@@ -13,5 +13,9 @@ public abstract class Quantifier {
         this.label = label;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public abstract double getMembership(double value);
 }

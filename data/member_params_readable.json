@@ -5,7 +5,8 @@
             "Universe": {
                 "Left": 16,
                 "Right": 45,
-                "Discrette": true
+                "Discrette": true,
+                "Step": 1
             },
             "Labels": [
                 {
@@ -65,7 +66,8 @@
             "Universe": {
                 "Left": 154,
                 "Right": 206,
-                "Discrette": false
+                "Discrette": false,
+                "Step": 0.1
             },
             "Labels": [
                 {
@@ -119,7 +121,8 @@
             "Universe": {
                 "Left": 110,
                 "Right": 243,
-                "Discrette": false
+                "Discrette": false,
+                "Step": 0.1
             },
 			"Labels": [
                 {
@@ -173,7 +176,8 @@
             "Universe": {
                 "Left": 10000,
                 "Right": 1185000000,
-                "Discrette": false
+                "Discrette": false,
+                "Step": 10
             },
             "Labels": [
                 {
@@ -243,7 +247,8 @@
             "Universe": {
                 "Left": 1000,
                 "Right": 556000,
-                "Discrette": false
+                "Discrette": false,
+                "Step": 1
             },
             "Labels": [
                 {
@@ -303,7 +308,8 @@
             "Universe": {
                 "Left": 731,
                 "Right": 2346,
-                "Discrette": true
+                "Discrette": true,
+                "Step": 1
             },
             "Labels": [
                 {
@@ -373,7 +379,8 @@
             "Universe": {
                 "Left": 12,
                 "Right": 96,
-                "Discrette": true
+                "Discrette": true,
+                "Step": 1
             },
             "Labels": [
                 {
@@ -431,7 +438,8 @@
             "Universe": {
                 "Left": 14,
                 "Right": 96,
-                "Discrette": true
+                "Discrette": true,
+                "Step": 1
             },
             "Labels": [
                 {
@@ -489,7 +497,8 @@
             "Universe": {
                 "Left": 12,
                 "Right": 96,
-                "Discrette": true
+                "Discrette": true,
+                "Step": 1
             },
             "Labels": [
                 {
@@ -547,7 +556,8 @@
             "Universe": {
                 "Left": 17,
                 "Right": 97,
-                "Discrette": true
+                "Discrette": true,
+                "Step": 1
             },
             "Labels": [
                 {

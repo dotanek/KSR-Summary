@@ -17,6 +17,10 @@ public class Label {
         this.membershipFunction = membershipFunction;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public double getMembership(double value) {
         return membershipFunction.getMembership(value);
     }
@@ -26,19 +30,20 @@ public class Label {
     }
 
     public List<Double> getAlphaCut(double threshold) {
-        List<Double> cut = new ArrayList<>();
-        for (double value : universe.getValues()) {
-            if (membershipFunction.getMembership(value) > threshold) {
-                cut.add(value);
+        return null;
+        /*List<Double> cut = new ArrayList<>();
+        for (double i = universe.getLeft(); i <= universe.getRight(); i += universe.getStep()) {
+            if (membershipFunction.getMembership(i) > threshold) {
+                cut.add(i);
             }
         }
-        return cut;
+        return cut;*/
     }
 
     public double getHeight() {
         double max = 0.0;
-        for (double value : universe.getValues()) {
-            double membership = membershipFunction.getMembership(value);
+        for (double i = universe.getLeft(); i <= universe.getRight(); i += universe.getStep()) {
+            double membership = membershipFunction.getMembership(i);
             if (membership > max) {
                 max = membership;
             }
@@ -47,13 +52,14 @@ public class Label {
     }
 
     public List<Double> getComplement() {
-        List<Double> complement = new ArrayList<>();
-        for (double value : universe.getValues()) {
-            if (membershipFunction.getMembership(value) == 0.0) {
-                complement.add(value);
+        return null;
+        /*List<Double> complement = new ArrayList<>();
+        for (double i = universe.getLeft(); i <= universe.getRight(); i += universe.getStep()) {
+            if (membershipFunction.getMembership(i) == 0.0) {
+                complement.add(i);
             }
         }
-        return complement;
+        return complement;*/
     }
 
     public boolean isEmpty() {
@@ -61,7 +67,7 @@ public class Label {
     }
 
     public boolean isConvex() {
-        return false;
+        return true;
     }
 
     public boolean isNormal() {
