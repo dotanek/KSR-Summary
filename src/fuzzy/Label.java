@@ -2,6 +2,7 @@ package fuzzy;
 
 import fuzzy.membership.MembershipFunction;
 import fuzzy.universe.Universe;
+import subject.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,14 @@ public class Label {
     private String name;
     private Universe universe;
     private MembershipFunction membershipFunction;
+    private LinguisticVariable linguisticVariable;
+
+    public Label(String name, Universe universe, MembershipFunction membershipFunction, LinguisticVariable linguisticVariable) {
+        this.name = name;
+        this.universe = universe;
+        this.membershipFunction = membershipFunction;
+        this.linguisticVariable = linguisticVariable;
+    }
 
     public Label(String name, Universe universe, MembershipFunction membershipFunction) {
         this.name = name;
@@ -17,11 +26,24 @@ public class Label {
         this.membershipFunction = membershipFunction;
     }
 
+    public void setLinguisticVariable(LinguisticVariable linguisticVariable) {
+        this.linguisticVariable = linguisticVariable;
+    }
+
+    public LinguisticVariable getLinguisticVariable() {
+        return linguisticVariable;
+    }
+
     public String getName() {
         return name;
     }
 
     public double getMembership(double value) {
+        return membershipFunction.getMembership(value);
+    }
+
+    public double getMembership(Subject subject) {
+        double value = subject.getAttribute(linguisticVariable.getName());
         return membershipFunction.getMembership(value);
     }
 
@@ -72,6 +94,19 @@ public class Label {
 
     public boolean isNormal() {
         return getHeight() == 1.0;
+    }
+
+    public static double getIntersectionMembership(double value, Label... sets) {
+        double minMembership = 1.0;
+
+        for (Label set : sets) {
+            double currentMembership = set.getMembership(value);
+            if (minMembership < currentMembership) {
+                minMembership = currentMembership;
+            }
+        }
+
+        return minMembership;
     }
 
     public static List<Double> intersection(Label l1, Label l2) {

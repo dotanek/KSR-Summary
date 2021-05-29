@@ -10,6 +10,6 @@ public class AbsoluteQuantifier extends Quantifier {
 
     @Override
     public double getMembership(double value) {
-        return 0.0;
+        return label.getMembership(value);
     }
 }

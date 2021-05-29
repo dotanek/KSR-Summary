@@ -16,17 +16,21 @@ public class TrapezoidalFunction extends MembershipFunction {
 
     @Override
     public double getMembership(double value) {
-        try {
-            if (value <= leftBottom || value >= rightBottom) {
-                return 0.0;
-            } else if (value <= leftTop) {
-                return (value - leftBottom) / (leftTop - leftBottom);
-            } else if (value >= rightTop) {
-                return (rightBottom - value) / (rightBottom - rightTop);
-            } else {
+        if (leftBottom == leftTop || rightBottom == rightTop) { // Avoiding division by 0 in case trapezoid has straight angle.
+            if (value == leftBottom) {
+                return 1.0;
+            } else if (value == rightBottom) {
                 return 1.0;
             }
-        } catch (ArithmeticException e) { // Division by 0 therefore trapezoid has a straight angle and should return 1.
+        }
+
+        if (value < leftBottom || value > rightBottom) {
+            return 0.0;
+        } else if (value <= leftTop) {
+            return (value - leftBottom) / (leftTop - leftBottom);
+        } else if (value >= rightTop) {
+            return (rightBottom - value) / (rightBottom - rightTop);
+        } else {
             return 1.0;
         }
     }

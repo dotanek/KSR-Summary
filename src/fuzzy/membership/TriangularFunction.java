@@ -13,7 +13,15 @@ public class TriangularFunction extends MembershipFunction {
 
     @Override
     public double getMembership(double value) {
-        if (value <= left || value >= right) {
+        if (left == apex || right == apex) { // Avoiding division by 0 in case triangle has straight angle.
+            if (value == left) {
+                return 1.0;
+            } else if (value == right) {
+                return 1.0;
+            }
+        }
+
+        if (value < left || value > right) {
             return 0.0;
         } else if (value < apex) {
             return (value - left) / (apex - left);

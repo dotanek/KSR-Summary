@@ -1,30 +1,30 @@
 package database;
 
-import subject.Attribute;
+import subject.Subject;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DatabaseConnection {
     private Connection connection;
 
-    private String CONNECTION_STRING = "jdbc:sqlserver://localhost:1433;databaseName=fifa;";
-    private String CONNECTION_USER = "javauser";
-    private String CONNECTION_PASSWORD = "password";
-    private String TABLE_NAME = "prepared_dataset";
-    private String[] ATTRIBURES_NAMES = {
-            "Age",
-            "Value",
-            "Wage",
-            "Special",
-            "Height",
-            "Weight",
-            "SprintSpeed",
-            "Agility",
-            "Stamina",
-            "Strength"
-    };
+    private final String CONNECTION_STRING = "jdbc:sqlserver://localhost:1433;databaseName=fifa;";
+    private final String CONNECTION_USER = "javauser";
+    private final String CONNECTION_PASSWORD = "password";
+    private final String TABLE_NAME = "dataset2";
+    private final String SUBJECTS_NAME = "PIŁKARZE";
+    private final Map<String,String> ATTRIBURES_NAMES = new HashMap<>() {{
+        put("Age","WIEK");
+        put("Value","WYCENA");
+        put("Wage", "WYNAGRODZENIE");
+        put("Special", "PODSUMOWANIE UMIEJĘTNOŚCI");
+        put("Height", "WZROST"); // I forgot to convert feet to cm while importing the data, yikes.
+        put("Weight","WAGA");
+        put("SprintSpeed","SZYBKOŚĆ SPRINTU");
+        put("Agility","ZWINNOŚĆ");
+        put("Stamina","WYTRZYMAŁOŚĆ");
+        put("Strength","SIŁA");
+    }};
 
     public boolean connect() {
         try {
@@ -41,32 +41,25 @@ public class DatabaseConnection {
         }
     }
 
-    public List<Attribute> getAttributes() {
-        List<Attribute> attributes = new ArrayList<>();
+    public List<Subject> getSubjects() {
+        List<Subject> subjects = new ArrayList<>();
 
         try (Statement statement = connection.createStatement()) {
-            StringBuilder query = new StringBuilder();
+            String query = "SELECT " + String.join(",", ATTRIBURES_NAMES.keySet()) + " FROM " + TABLE_NAME;
 
-            query.append("SELECT ");
-            for (int i = 0; i < ATTRIBURES_NAMES.length; i++) {
-                String name = ATTRIBURES_NAMES[i];
-                attributes.add(new Attribute(name));
-               query.append(((i == 0) ? "" : ", ")+name);
-            }
-            query.append(" FROM "+TABLE_NAME);
-
-            ResultSet resultSet = statement.executeQuery(query.toString());
+            ResultSet resultSet = statement.executeQuery(query);
             while(resultSet.next()) {
-                for (int i = 0; i < ATTRIBURES_NAMES.length; i++) {
-                    int e = 0;
-                    attributes.get(i).getValues().add(resultSet.getDouble(ATTRIBURES_NAMES[i]));
+                Map<String,Double> attributes = new HashMap<>();
+                for (String key : ATTRIBURES_NAMES.keySet()) {
+                    attributes.put(ATTRIBURES_NAMES.get(key),resultSet.getDouble(key));
                 }
+                subjects.add(new Subject(attributes));
             }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return attributes;
+        return subjects;
     }
 }

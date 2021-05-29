@@ -5,15 +5,13 @@ import database.DataLoader;
 import database.DatabaseConnection;
 import fuzzy.Label;
 import fuzzy.LinguisticVariable;
-import fuzzy.Summary;
+import fuzzy.summary.Summary;
 import fuzzy.quantifier.Quantifier;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.json.JSONObject;
-import org.w3c.dom.Attr;
-import subject.Attribute;
+import subject.Subject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
@@ -34,14 +32,40 @@ public class Main extends Application {
         String dataPath = System.getProperty("user.dir") + "\\data";
         DataLoader dataLoader = new DataLoader(dataPath);
         JSONObject jsonParams = dataLoader.loadMembershipParams();
-        List<LinguisticVariable> linVariables = DataInitialization.initializeLinguisticVariables(jsonParams);
-        List<Quantifier> quantifiers = DataInitialization.initializeAbsoluteQuantifiers(jsonParams);
 
         DatabaseConnection databaseConnection = new DatabaseConnection();
         databaseConnection.connect();
-        List<Attribute> attributes = databaseConnection.getAttributes();
 
-        //Summary summary = new Summary(quantifiers.get(6),null,linVariables.get(3).getLabels().get(0),attributes.get(0),"PIŁKARZY");
-        //System.out.println(summary.toString());
+        List<LinguisticVariable> linguisticVariables = DataInitialization.initializeLinguisticVariables(jsonParams);
+        List<Quantifier> quantifiers = DataInitialization.initializeAllQuantifiers(jsonParams);
+        //Subjects subjects = databaseConnection.getSubjects();
+        List<Subject> subjects = databaseConnection.getSubjects();
+
+        Subject test = subjects.get(0);
+
+        LinguisticVariable wiek = linguisticVariables.get(0);
+        Label bmlody = wiek.getLabels().get(0);
+        Label mlody = wiek.getLabels().get(1);
+        Label sredni = wiek.getLabels().get(2);
+        //double val = 31.0;
+        //System.out.println("Membership bmlody = "+bmlody.getMembership(val));
+        //System.out.println("Membership mlody = "+mlody.getMembership(val));
+        //System.out.println("Membership intersection = "+ Label.getIntersectionMembership(val,bmlody,mlody));
+        //
+        Summary summary = new Summary(quantifiers.get(8),linguisticVariables.get(0).getLabels().get(2),linguisticVariables.get(1).getLabels().get(0), subjects,"PIŁKARZE");
+        Summary summary2 = new Summary(quantifiers.get(8),linguisticVariables.get(0).getLabels().get(2),linguisticVariables.get(1).getLabels().get(1), subjects,"PIŁKARZE");
+        Summary summary3 = new Summary(quantifiers.get(8),linguisticVariables.get(0).getLabels().get(2),linguisticVariables.get(1).getLabels().get(2), subjects,"PIŁKARZE");
+        Summary summary4 = new Summary(quantifiers.get(8),linguisticVariables.get(0).getLabels().get(2),linguisticVariables.get(1).getLabels().get(3), subjects,"PIŁKARZE");
+        Summary summary5 = new Summary(quantifiers.get(8),linguisticVariables.get(0).getLabels().get(2),linguisticVariables.get(1).getLabels().get(4), subjects,"PIŁKARZE");
+        System.out.println(summary.toString()+" = "+ summary.getTruthDegree());
+        System.out.println(summary2.toString()+" = "+ summary2.getTruthDegree());
+        System.out.println(summary3.toString()+" = "+ summary3.getTruthDegree());
+        System.out.println(summary4.toString()+" = "+ summary4.getTruthDegree());
+        System.out.println(summary5.toString()+" = "+ summary5.getTruthDegree());
+
+        //SummaryGenerator summaryGenerator = new SummaryGenerator(linguisticVariables,quantifiers,subjects);
+        //summaryGenerator.generateSingleFirstFormSummaries();
+        //summaryGenerator.generateSingleSecondFormSummaries();
+
     }
 }

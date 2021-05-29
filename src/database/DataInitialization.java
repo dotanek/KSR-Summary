@@ -1,5 +1,6 @@
 package database;
 
+import com.mysql.cj.interceptors.QueryInterceptor;
 import fuzzy.Label;
 import fuzzy.LinguisticVariable;
 import fuzzy.membership.GaussianFunction;
@@ -10,6 +11,7 @@ import fuzzy.quantifier.AbsoluteQuantifier;
 import fuzzy.quantifier.Quantifier;
 //import fuzzy.universe.DenseUniverse;
 //import fuzzy.universe.DiscretteUniverse;
+import fuzzy.quantifier.RelativeQuantifier;
 import fuzzy.universe.Universe;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,10 +52,18 @@ public class DataInitialization {
         return variables;
     }
 
-    public static List<Quantifier> initializeAbsoluteQuantifiers(JSONObject params) {
-        JSONObject jsonQuantifiers = params.getJSONObject("Quantifiers");
-        JSONObject jsonAbsoluteQuantifiers = jsonQuantifiers.getJSONObject("Absolute");
-        JSONArray jsonLabels = jsonAbsoluteQuantifiers.getJSONArray("Labels");
+    public static List<Quantifier> initializeQuantifiers(JSONObject params, boolean absolute) {
+        JSONObject jsonAllQuantifiers = params.getJSONObject("Quantifiers");
+
+        JSONObject jsonQuantifiers;
+
+        if (absolute) {
+            jsonQuantifiers = jsonAllQuantifiers.getJSONObject("Absolute");
+        } else {
+            jsonQuantifiers = jsonAllQuantifiers.getJSONObject("Relative");
+        }
+
+        JSONArray jsonLabels = jsonQuantifiers.getJSONArray("Labels");
 
         List<Quantifier> quantifiers = new ArrayList<>();
 
@@ -65,9 +75,28 @@ public class DataInitialization {
             MembershipFunction membershipFunction = initializeMemebershipFunction(jsonFunction);
             Label label = new Label(lName,null,membershipFunction);
 
-            quantifiers.add(new AbsoluteQuantifier(lName,label));
+            if (absolute) {
+                quantifiers.add(new AbsoluteQuantifier(lName,label));
+            } else {
+                quantifiers.add(new RelativeQuantifier(lName,label));
+            }
+
         }
 
+        return quantifiers;
+    }
+
+    public static List<Quantifier> initializeAbsoluteQuantifiers(JSONObject params) {
+        return initializeQuantifiers(params,true);
+    }
+
+    public static List<Quantifier> initializeRelativeQuantifiers(JSONObject params) {
+        return initializeQuantifiers(params,false);
+    }
+
+    public static List<Quantifier> initializeAllQuantifiers(JSONObject params) {
+        List<Quantifier> quantifiers = initializeQuantifiers(params,true);
+        quantifiers.addAll(initializeQuantifiers(params,false));
         return quantifiers;
     }
 

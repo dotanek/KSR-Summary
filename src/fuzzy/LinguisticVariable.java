@@ -1,5 +1,7 @@
 package fuzzy;
 
+import subject.Subject;
+
 import java.util.List;
 
 public class LinguisticVariable {
@@ -9,6 +11,10 @@ public class LinguisticVariable {
     public LinguisticVariable(String name, List<Label> labels) {
         this.name = name;
         this.labels = labels;
+
+        for (Label label : labels) {
+            label.setLinguisticVariable(this);
+        }
     }
 
     public String getName() {
@@ -30,5 +36,27 @@ public class LinguisticVariable {
             }
         }
         return topLabel;
+    }
+
+    public static double getIntersectionMembership(Subject subject, Label... sets) {
+        double minMembership = 1.0;
+
+        for (Label set : sets) {
+            double currentMembership = set.getMembership(subject);
+            if (currentMembership < minMembership) {
+                minMembership = currentMembership;
+            }
+        }
+
+        return minMembership;
+    }
+
+    public static LinguisticVariable findVariableInList(List<LinguisticVariable> variables, String name) {
+        for (LinguisticVariable variable : variables) {
+            if (variable.getName().equals(name)) {
+                return variable;
+            }
+        }
+        return null;
     }
 }

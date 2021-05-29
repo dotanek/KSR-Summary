@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class Quantifier {
     private String name;
-    private Label label;
+    protected Label label;
 
     public Quantifier(String name, Label label) {
         this.name = name;
