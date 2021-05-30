@@ -7,6 +7,7 @@ import fuzzy.Label;
 import fuzzy.LinguisticVariable;
 import fuzzy.summary.Summary;
 import fuzzy.quantifier.Quantifier;
+import fuzzy.summary.SummaryGenerator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.json.JSONObject;
@@ -27,7 +28,6 @@ public class Main extends Application {
         */
     }
 
-
     public static void main(String[] args){
         //launch(args);
         String dataPath = System.getProperty("user.dir") + "\\data";
@@ -38,35 +38,29 @@ public class Main extends Application {
         databaseConnection.connect();
 
         List<LinguisticVariable> linguisticVariables = DataInitialization.initializeLinguisticVariables(jsonParams);
-        List<Quantifier> quantifiers = DataInitialization.initializeAllQuantifiers(jsonParams);
-        //Subjects subjects = databaseConnection.getSubjects();
+        List<Quantifier> absoluteQuantifiers = DataInitialization.initializeAbsoluteQuantifiers(jsonParams);
+        List<Quantifier> relativeQuantifiers = DataInitialization.initializeRelativeQuantifiers(jsonParams);
         List<Subject> subjects = databaseConnection.getSubjects();
 
-        List<Label> summarizers = new ArrayList<>();
+        SummaryGenerator summaryGenerator = new SummaryGenerator(
+                linguisticVariables,
+                absoluteQuantifiers,
+                relativeQuantifiers,
+                subjects
+        );
+
         List<Label> qualifiers = new ArrayList<>();
-        summarizers.add(linguisticVariables.get(3).getLabels().get(0));
-        summarizers.add(linguisticVariables.get(4).getLabels().get(0));
-        //summarizers.add(linguisticVariables.get(6).getLabels().get(1));
-        //summarizers.add(linguisticVariables.get(5).getLabels().get(2));
-        qualifiers.add(linguisticVariables.get(0).getLabels().get(1));
+        List<Label> summarizers = new ArrayList<>();
 
-        for (Quantifier quantifier : quantifiers) {
-            //Summary summary = new Summary(quantifier,qualifiers,summarizers,subjects,"PIŁKARZE");
-            //System.out.println(summary.toString() + " (" + summary.getTruthDegree() + ")");
-        }
+        Quantifier quantifier = summaryGenerator.getQuantifier("OKOŁO 5 TYSIĘCY");
 
-        Label test = linguisticVariables.get(2).getLabels().get(3);
-        //System.out.print(test.getName() + " = " + test.getFuzzinessDegree());
-        Summary summary = new Summary(quantifiers.get(11),qualifiers,summarizers,subjects,"PIŁKARZE");
-        System.out.println(summary.toString());
-        System.out.println("T1 = " + summary.getTruthDegree());
-        System.out.println("T2 = " + summary.getImprecisionDegree());
-        System.out.println("T4 (first qualifier) = " + summary.getSecondFormAppropriatenessDegree(qualifiers.get(0)));
-        System.out.println("T5 = " + summary.getSummaryLength());
-        System.out.println("T6 = " + summary.getQuantifierImprecisionDegree());
-        System.out.println("T7 = " + summary.getQuantifierCardinalityDegree());
-        System.out.println("T8 = " + summary.getSummarizerCardinalityDegree());
-        System.out.println("T9 = " + summary.getQualifierImprecisionDegree());
-        System.out.println("T10 = " + summary.getQualifierCardinalityDegree());
+        //qualifiers.add(summaryGenerator.getLabel("W ŚREDNIM WIEKU"));
+
+        summarizers.add(summaryGenerator.getLabel("W ŚREDNIM WIEKU"));
+
+
+        Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
+        System.out.println(summary.getSummaryText());
+        System.out.println(summary.getQualitiesText());
     }
 }

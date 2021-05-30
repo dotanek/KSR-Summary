@@ -72,15 +72,14 @@ public class Summary {
         return 1 - Math.pow(fuzziness,1 / (double)summarizers.size());
     }
 
-    /*public double getCoverageDegree() {
+    public double getCoverageDegree() {
         if (qualifiers == null) {
             return getFirstFormCoverageDegree();
         }
         return getSecondFormCoverageDegree();
-    }*/
+    }
 
-    /*public double getSecondFormCoverageDegree() {
-
+    public double getSecondFormCoverageDegree() {
         double coverageIntersection = 0.0;
         double coverageQualifier = 0.0;
 
@@ -89,28 +88,11 @@ public class Summary {
         all.addAll(qualifiers);
 
         for (Subject subject : subjects) {
-            if (LinguisticVariable.getIntersectionMembership(subject,all) > 0.0) {
+            if (LinguisticVariable.getIntersectionMembership(subject, all) > 0.0) {
                 coverageIntersection += 1.0;
             }
 
-            if (LinguisticVariable.getIntersectionMembership(subject,qualifiers) > 0.0) {
-                coverageQualifier += 1.0;
-            }
-        }
-
-        return coverageIntersection / coverageQualifier;
-    }*/
-
-    public double getSecondFormCoverageDegree(Label qualifier, Label summarizer) {
-        double coverageIntersection = 0.0;
-        double coverageQualifier = 0.0;
-
-        for (Subject subject : subjects) {
-            if (LinguisticVariable.getIntersectionMembership(subject,summarizer,qualifier) > 0.0) {
-                coverageIntersection += 1.0;
-            }
-
-            if (qualifier.getMembership(subject) > 0.0) {
+            if (LinguisticVariable.getIntersectionMembership(subject, qualifiers) > 0.0) {
                 coverageQualifier += 1.0;
             }
         }
@@ -118,23 +100,11 @@ public class Summary {
         return coverageIntersection / coverageQualifier;
     }
 
-    /*public double getFirstFormCoverageDegree() {
+    public double getFirstFormCoverageDegree() {
         double coverageIntersection = 0.0;
 
         for (Subject subject : subjects) {
-            if (LinguisticVariable.getIntersectionMembership(subject,summarizers) > 0.0) {
-                coverageIntersection += 1.0;
-            }
-        }
-
-        return coverageIntersection / (double)subjects.size();
-    }*/
-
-    public double getFirstFormCoverageDegree(Label summarizer) {
-        double coverageIntersection = 0.0;
-
-        for (Subject subject : subjects) {
-            if (summarizer.getMembership(subject) > 0.0) {
+            if (LinguisticVariable.getIntersectionMembership(subject,summarizers) > 0) {
                 coverageIntersection += 1.0;
             }
         }
@@ -142,38 +112,27 @@ public class Summary {
         return coverageIntersection / (double)subjects.size();
     }
 
-    public double getFirstFormAppropriatenessDegree() {
-        double appropriatenes = 1.0;
+    public double getAppropriatenessDegree() {
+        double appropriateness = 1.0;
+        double T3;
+
+        if (qualifiers == null || qualifiers.size() == 0) {
+            T3 = getFirstFormCoverageDegree();
+        } else {
+            T3 = getSecondFormCoverageDegree();
+        }
 
         for (Label summarizer : summarizers) {
             double r = 0.0;
-            double T3 = getFirstFormCoverageDegree(summarizer);
             for (Subject subject : subjects) {
                 if (summarizer.getMembership(subject) > 0) {
                     r += 1.0;
                 }
             }
-            appropriatenes *= r / (double)subjects.size() - T3;
+            appropriateness *= r / (double)subjects.size();
         }
 
-        return Math.abs(appropriatenes);
-    }
-
-    public double getSecondFormAppropriatenessDegree(Label qualifier) {
-        double appropriatenes = 1.0;
-
-        for (Label summarizer : summarizers) {
-            double r = 0.0;
-            double T3 = getSecondFormCoverageDegree(summarizer,qualifier);
-            for (Subject subject : subjects) {
-                if (summarizer.getMembership(subject) > 0) {
-                    r += 1.0;
-                }
-            }
-            appropriatenes *= r / (double)subjects.size() - T3;
-        }
-
-        return Math.abs(appropriatenes);
+        return Math.abs(appropriateness - T3);
     }
 
     public double getSummaryLength() {
@@ -205,6 +164,10 @@ public class Summary {
     }
 
     public double getQualifierImprecisionDegree() {
+        if (qualifiers == null || qualifiers.size() == 0) {
+            return 1.0;
+        }
+
         double imprecision = 1.0;
 
         for (Label qualifier : qualifiers) {
@@ -215,6 +178,10 @@ public class Summary {
     }
 
     public double getQualifierCardinalityDegree() {
+        if (qualifiers == null || qualifiers.size() == 0) {
+            return 1.0;
+        }
+
         double cardinality = 1.0;
 
         for (Label qualifier : qualifiers) {
@@ -223,7 +190,33 @@ public class Summary {
         return 1 - Math.pow(cardinality,1 / (double)qualifiers.size());
     }
 
-    public String toString() {
+    public double getQualifierLength() {
+        if (qualifiers == null || qualifiers.size() == 0) {
+            return 1.0;
+        }
+        return 2 * Math.pow(0.5,qualifiers.size());
+    }
+
+    public double getOptimalSummaryDegree() {
+        double weightTruth = 0.4;
+        double weightRest = (1 - 0.4) / 10;
+        double degree = 0.0;
+        degree += getTruthDegree() * weightTruth; // T1
+        degree += getImprecisionDegree() * weightRest; // T2
+        degree += getCoverageDegree() * weightRest; // T3
+        degree += getAppropriatenessDegree() * weightRest; // T4
+        degree += getSummaryLength() * weightRest; // T5
+        degree += getQuantifierImprecisionDegree() * weightRest; // T6
+        degree += getQualifierCardinalityDegree() * weightRest; // T7
+        degree += getSummarizerCardinalityDegree() * weightRest; // T8
+        degree += getQualifierImprecisionDegree()* weightRest; // T9
+        degree += getQualifierCardinalityDegree()* weightRest; // T10
+        degree += getQualifierLength()* weightRest; // T11
+
+        return degree;
+    }
+
+    public String getSummaryText() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(quantifier.getName());
@@ -247,6 +240,28 @@ public class Summary {
             stringBuilder.append(summarizers.get(i).getName());
         }
 
+        return stringBuilder.toString();
+    }
+
+
+    private double round(double value) {
+        return Math.round(value * 100.0) / 100.0;
+    }
+
+    public String getQualitiesText() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("T = " + round(getOptimalSummaryDegree())+", ");
+        stringBuilder.append("T1 = " + round(getTruthDegree())+", ");
+        stringBuilder.append("T2 = " + round(getImprecisionDegree())+", ");
+        stringBuilder.append("T3 = " + round(getCoverageDegree())+", ");
+        stringBuilder.append("T4 = " + round(getAppropriatenessDegree())+", ");
+        stringBuilder.append("T5 = " + round(getSummaryLength())+", ");
+        stringBuilder.append("T6 = " + round(getQuantifierImprecisionDegree())+", ");
+        stringBuilder.append("T7 = " + round(getQuantifierCardinalityDegree())+", ");
+        stringBuilder.append("T8 = " + round(getSummarizerCardinalityDegree())+", ");
+        stringBuilder.append("T9 = " + round(getQualifierImprecisionDegree())+", ");
+        stringBuilder.append("T10 = " + round(getQualifierCardinalityDegree())+", ");
+        stringBuilder.append("T11 = " + round(getQualifierLength())+", ");
         return stringBuilder.toString();
     }
 }

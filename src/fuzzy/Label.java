@@ -13,7 +13,7 @@ public class Label {
     private Universe universe;
     private MembershipFunction membershipFunction;
     private LinguisticVariable linguisticVariable;
-    
+
     public Label(String name, Universe universe, MembershipFunction membershipFunction) {
         this.name = name;
         this.universe = universe;

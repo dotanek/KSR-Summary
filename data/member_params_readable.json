@@ -695,7 +695,7 @@
 					}
 				},
 				{
-					"Name": "MNIEJSZOSĆ",
+					"Name": "MNIEJSZOŚĆ",
 					"Function": {
 						"Type": "Trapezoidal",
 						"LeftBottom": 0.15,
