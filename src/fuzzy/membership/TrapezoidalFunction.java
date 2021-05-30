@@ -36,6 +36,16 @@ public class TrapezoidalFunction extends MembershipFunction {
     }
 
     @Override
+    public double getSupportCardinality() {
+        return rightBottom - leftBottom;
+    }
+
+    @Override
+    public double getCardinality() {
+        return 0.5 * (rightBottom - leftBottom + (rightTop - leftTop));
+    }
+
+    @Override
     public String toString() {
         return "TrapezoidalFunction{" +
                 "leftBottom=" + leftBottom +

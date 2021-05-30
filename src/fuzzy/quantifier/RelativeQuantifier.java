@@ -8,6 +8,16 @@ public class RelativeQuantifier extends Quantifier {
     }
 
     @Override
+    public double getSupportCardinality() {
+        return label.getMembershipFunction().getSupportCardinality();
+    }
+
+    @Override
+    public double getCardinality() {
+       return label.getMembershipFunction().getCardinality();
+    }
+
+    @Override
     public double getMembership(double value) {
         return label.getMembership(value);
     }

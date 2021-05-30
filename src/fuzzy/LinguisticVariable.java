@@ -63,13 +63,4 @@ public class LinguisticVariable {
 
         return minMembership;
     }
-
-    public static LinguisticVariable findVariableInList(List<LinguisticVariable> variables, String name) {
-        for (LinguisticVariable variable : variables) {
-            if (variable.getName().equals(name)) {
-                return variable;
-            }
-        }
-        return null;
-    }
 }

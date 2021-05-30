@@ -17,5 +17,8 @@ public abstract class Quantifier {
         return name;
     }
 
+    public abstract double getSupportCardinality();
+    public abstract double getCardinality();
+
     public abstract double getMembership(double value);
 }

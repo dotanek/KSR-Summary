@@ -1,5 +1,6 @@
 package fuzzy;
 
+import fuzzy.membership.GaussianFunction;
 import fuzzy.membership.MembershipFunction;
 import fuzzy.universe.Universe;
 import subject.Subject;
@@ -12,14 +13,7 @@ public class Label {
     private Universe universe;
     private MembershipFunction membershipFunction;
     private LinguisticVariable linguisticVariable;
-
-    public Label(String name, Universe universe, MembershipFunction membershipFunction, LinguisticVariable linguisticVariable) {
-        this.name = name;
-        this.universe = universe;
-        this.membershipFunction = membershipFunction;
-        this.linguisticVariable = linguisticVariable;
-    }
-
+    
     public Label(String name, Universe universe, MembershipFunction membershipFunction) {
         this.name = name;
         this.universe = universe;
@@ -28,10 +22,6 @@ public class Label {
 
     public void setLinguisticVariable(LinguisticVariable linguisticVariable) {
         this.linguisticVariable = linguisticVariable;
-    }
-
-    public LinguisticVariable getLinguisticVariable() {
-        return linguisticVariable;
     }
 
     public String getName() {
@@ -53,13 +43,6 @@ public class Label {
 
     public List<Double> getAlphaCut(double threshold) {
         return null;
-        /*List<Double> cut = new ArrayList<>();
-        for (double i = universe.getLeft(); i <= universe.getRight(); i += universe.getStep()) {
-            if (membershipFunction.getMembership(i) > threshold) {
-                cut.add(i);
-            }
-        }
-        return cut;*/
     }
 
     public double getHeight() {
@@ -73,16 +56,35 @@ public class Label {
         return max;
     }
 
-    public List<Double> getComplement() {
-        return null;
-        /*List<Double> complement = new ArrayList<>();
-        for (double i = universe.getLeft(); i <= universe.getRight(); i += universe.getStep()) {
-            if (membershipFunction.getMembership(i) == 0.0) {
-                complement.add(i);
-            }
+    public double getFuzziness() {
+        if (membershipFunction instanceof GaussianFunction) {
+            return  1.0;
         }
-        return complement;*/
+        return membershipFunction.getSupportCardinality() / (universe.getRight() - universe.getLeft());
     }
+
+    public double getCardinality() {
+        double left = universe.getLeft();
+        double right = universe.getRight();
+
+        if (membershipFunction instanceof GaussianFunction) {
+            double step = universe.getStep();
+            double cardinality = 0.0;
+
+            for (double i = left; i <= right; i += step) {
+                cardinality += i * step;
+            }
+
+            return cardinality / (right - left);
+        }
+        return membershipFunction.getCardinality() / (right - left);
+    }
+
+    public MembershipFunction getMembershipFunction() {
+        return membershipFunction;
+    }
+
+    public List<Double> getComplement() { return null; }
 
     public boolean isEmpty() {
         return getHeight() == 0.0;
@@ -94,30 +96,5 @@ public class Label {
 
     public boolean isNormal() {
         return getHeight() == 1.0;
-    }
-
-    public static double getIntersectionMembership(double value, Label... sets) {
-        double minMembership = 1.0;
-
-        for (Label set : sets) {
-            double currentMembership = set.getMembership(value);
-            if (minMembership < currentMembership) {
-                minMembership = currentMembership;
-            }
-        }
-
-        return minMembership;
-    }
-
-    public static List<Double> intersection(Label l1, Label l2) {
-        return null;
-    }
-
-    public static List<Double> difference(Label l1, Label l2) {
-        return null;
-    }
-
-    public static List<Double> union(Label l1, Label l2) {
-        return null;
     }
 }

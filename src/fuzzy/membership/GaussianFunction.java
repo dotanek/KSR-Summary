@@ -16,6 +16,16 @@ public class GaussianFunction extends MembershipFunction {
     }
 
     @Override
+    public double getSupportCardinality() {
+        return 0.0;
+    }
+
+    @Override
+    public double getCardinality() {
+        return 0.0;
+    }
+
+    @Override
     public String toString() {
         return "GaussianFunction{" +
                 "apex=" + apex +

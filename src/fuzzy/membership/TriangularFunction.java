@@ -33,6 +33,16 @@ public class TriangularFunction extends MembershipFunction {
     }
 
     @Override
+    public double getSupportCardinality() {
+        return right - left;
+    }
+
+    @Override
+    public double getCardinality() {
+        return 0.5 * (right - left);
+    }
+
+    @Override
     public String toString() {
         return "TriangularFunction{" +
                 "left=" + left +
