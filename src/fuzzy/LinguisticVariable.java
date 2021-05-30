@@ -51,6 +51,19 @@ public class LinguisticVariable {
         return minMembership;
     }
 
+    public static double getIntersectionMembership(Subject subject, List<Label> sets) {
+        double minMembership = 1.0;
+
+        for (Label set : sets) {
+            double currentMembership = set.getMembership(subject);
+            if (currentMembership < minMembership) {
+                minMembership = currentMembership;
+            }
+        }
+
+        return minMembership;
+    }
+
     public static LinguisticVariable findVariableInList(List<LinguisticVariable> variables, String name) {
         for (LinguisticVariable variable : variables) {
             if (variable.getName().equals(name)) {

@@ -6,25 +6,26 @@ import fuzzy.quantifier.AbsoluteQuantifier;
 import fuzzy.quantifier.Quantifier;
 import subject.Subject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Summary {
     private Quantifier quantifier;
-    private Label qualifier;
-    private Label summarizer;
+    private List<Label> qualifiers;
+    private List<Label> summarizers;
     private List<Subject> subjects;
     private String subjectName;
 
-    public Summary(Quantifier quantifier, Label qualifier, Label summarizer, List<Subject> subjects, String subjectName) {
+    public Summary(Quantifier quantifier, List<Label> qualifiers, List<Label> summarizers, List<Subject> subjects, String subjectName) {
         this.quantifier = quantifier;
-        this.qualifier = qualifier;
-        this.summarizer = summarizer;
+        this.qualifiers = qualifiers;
+        this.summarizers = summarizers;
         this.subjects = subjects;
         this.subjectName = subjectName;
     }
 
     public double getTruthDegree() {
-        if (qualifier == null) {
+        if (qualifiers == null || qualifiers.size() == 0) {
             return getFirstFormTruthDegree();
         }
         return getSecondFormTruthDegree();
@@ -34,7 +35,7 @@ public class Summary {
         double sCount = 0.0;
 
         for (Subject subject : subjects) {
-            sCount += summarizer.getMembership(subject);
+            sCount += LinguisticVariable.getIntersectionMembership(subject, summarizers);
         }
 
         double cardinality = (quantifier instanceof AbsoluteQuantifier) ? sCount : sCount / subjects.size();
@@ -43,15 +44,18 @@ public class Summary {
     }
 
     private double getSecondFormTruthDegree() {
-        double sCountIntersection = 0.0;
-        double sCountQualifier = 0.0;
+        double sCountNominator = 0.0;
+        double sCountDenominator = 0.0;
 
         for (Subject subject : subjects) {
-            sCountIntersection += LinguisticVariable.getIntersectionMembership(subject,summarizer,qualifier);
-            sCountQualifier += qualifier.getMembership(subject);
+            List<Label> all = new ArrayList<>();
+            all.addAll(summarizers);
+            all.addAll(qualifiers);
+            sCountNominator += LinguisticVariable.getIntersectionMembership(subject,all);
+            sCountDenominator += LinguisticVariable.getIntersectionMembership(subject,qualifiers);
         }
 
-        return quantifier.getMembership(sCountIntersection / sCountQualifier);
+        return quantifier.getMembership(sCountNominator / sCountDenominator);
     }
 
     public String toString() {
@@ -60,13 +64,23 @@ public class Summary {
         stringBuilder.append(quantifier.getName());
         stringBuilder.append(" "+subjectName);
 
-        if (qualifier != null) {
+        if (qualifiers != null && qualifiers.size() != 0) {
             stringBuilder.append(", KTÓRZY SĄ/MAJĄ ");
-            stringBuilder.append(qualifier.getName());
+            stringBuilder.append(qualifiers.get(0).getName());
+
+            for (int i = 1; i < qualifiers.size(); i++) {
+                stringBuilder.append(" ORAZ ");
+                stringBuilder.append(qualifiers.get(i).getName());
+            }
         }
 
         stringBuilder.append(" SĄ/MAJĄ ");
-        stringBuilder.append(summarizer.getName());
+        stringBuilder.append(summarizers.get(0).getName());
+
+        for (int i = 1; i < summarizers.size(); i++) {
+            stringBuilder.append(" ORAZ ");
+            stringBuilder.append(summarizers.get(i).getName());
+        }
 
         return stringBuilder.toString();
     }
