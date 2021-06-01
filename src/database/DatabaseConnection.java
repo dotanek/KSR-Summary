@@ -26,6 +26,8 @@ public class DatabaseConnection {
         put("Strength","SIŁA");
     }};
 
+    private final String BONUS_ATTRIBUTE_NAME = "Nationality";
+
     public boolean connect() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -45,7 +47,7 @@ public class DatabaseConnection {
         List<Subject> subjects = new ArrayList<>();
 
         try (Statement statement = connection.createStatement()) {
-            String query = "SELECT " + String.join(",", ATTRIBURES_NAMES.keySet()) + " FROM " + TABLE_NAME;
+            String query = "SELECT " +String.join(",", ATTRIBURES_NAMES.keySet()) + "," + BONUS_ATTRIBUTE_NAME + " FROM " + TABLE_NAME;
 
             ResultSet resultSet = statement.executeQuery(query);
             while(resultSet.next()) {
@@ -53,7 +55,9 @@ public class DatabaseConnection {
                 for (String key : ATTRIBURES_NAMES.keySet()) {
                     attributes.put(ATTRIBURES_NAMES.get(key),resultSet.getDouble(key));
                 }
-                subjects.add(new Subject(attributes));
+
+                String bonusAttribute = resultSet.getString(BONUS_ATTRIBUTE_NAME);
+                subjects.add(new Subject(attributes,bonusAttribute.toUpperCase(Locale.ROOT)));
             }
 
         } catch (SQLException throwables) {

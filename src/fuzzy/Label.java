@@ -72,7 +72,7 @@ public class Label {
             double cardinality = 0.0;
 
             for (double i = left; i <= right; i += step) {
-                cardinality += i * step;
+                cardinality += getMembership(i) * step;
             }
 
             return cardinality / (right - left);

@@ -97,6 +97,10 @@ public class Summary {
             }
         }
 
+        if (coverageQualifier == 0.0) {
+            return 0.0;
+        }
+
         return coverageIntersection / coverageQualifier;
     }
 
@@ -179,7 +183,7 @@ public class Summary {
 
     public double getQualifierCardinalityDegree() {
         if (qualifiers == null || qualifiers.size() == 0) {
-            return 1.0;
+            return 0.0;
         }
 
         double cardinality = 1.0;
@@ -198,8 +202,8 @@ public class Summary {
     }
 
     public double getOptimalSummaryDegree() {
-        double weightTruth = 0.4;
-        double weightRest = (1 - 0.4) / 10;
+        double weightTruth = 0.5;
+        double weightRest = (1 - weightTruth) / 10;
         double degree = 0.0;
         degree += getTruthDegree() * weightTruth; // T1
         degree += getImprecisionDegree() * weightRest; // T2
@@ -207,12 +211,11 @@ public class Summary {
         degree += getAppropriatenessDegree() * weightRest; // T4
         degree += getSummaryLength() * weightRest; // T5
         degree += getQuantifierImprecisionDegree() * weightRest; // T6
-        degree += getQualifierCardinalityDegree() * weightRest; // T7
+        degree += getQuantifierCardinalityDegree() * weightRest; // T7
         degree += getSummarizerCardinalityDegree() * weightRest; // T8
         degree += getQualifierImprecisionDegree()* weightRest; // T9
         degree += getQualifierCardinalityDegree()* weightRest; // T10
         degree += getQualifierLength()* weightRest; // T11
-
         return degree;
     }
 
@@ -242,7 +245,6 @@ public class Summary {
 
         return stringBuilder.toString();
     }
-
 
     private double round(double value) {
         return Math.round(value * 100.0) / 100.0;
