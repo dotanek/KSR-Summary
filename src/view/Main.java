@@ -51,8 +51,10 @@ public class Main extends Application {
                 subjects
         );
 
-        List<Subject> subjects1 = Subject.getSubjects(subjects,"ARGENTINA");
-        List<Subject> subjects2 = Subject.getSubjects(subjects,"PORTUGAL");
+        List<Subject> subjects2 = Subject.getSubjects(subjects,"ARGENTINA");
+        List<Subject> subjects1 = Subject.getSubjects(subjects,"KOREA REPUBLIC");
+
+
 
         List<Label> qualifiers = new ArrayList<>();
         List<Label> summarizers = new ArrayList<>();
@@ -66,8 +68,8 @@ public class Main extends Application {
         //Quantifier quantifier = summaryGenerator.getQuantifier("PRAWIE NIKT");
         //summarizers.add(summaryGenerator.getLabel("WSPANIAŁY"));
 
-        //Quantifier quantifier = summaryGenerator.getQuantifier("WIĘKSZOŚĆ");
-        //summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
+        Quantifier quantifier = summaryGenerator.getQuantifier("WIĘKSZOŚĆ");
+        summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
 
         //Quantifier quantifier = summaryGenerator.getQuantifier("MNIEJSZOŚĆ");
         //summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
@@ -96,19 +98,19 @@ public class Main extends Application {
         //summarizers.add(summaryGenerator.getLabel("BARDZO MAŁO ZARABIAJĄCY"));
         //summarizers.add(summaryGenerator.getLabel("BARDZO TANI"));
 
-        RelativeQuantifier quantifier = (RelativeQuantifier) summaryGenerator.getQuantifier("PRAWIE NIKT");
-        summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
-        qualifiers.add(summaryGenerator.getLabel("MAŁO ZARABIAJĄCY"));
+        //RelativeQuantifier quantifier = (RelativeQuantifier) summaryGenerator.getQuantifier("PRAWIE NIKT");
+        //summarizers.add(summaryGenerator.getLabel("WYSOKI"));
+        //qualifiers.add(summaryGenerator.getLabel("MAŁO ZARABIAJĄCY"));
 
-        MultiSubjectSummary multiSummary = new MultiSubjectSummary(quantifier,qualifiers, summarizers, subjects1, subjects2,"PIŁKARZE");
-        System.out.println("First: "+multiSummary.getThirdFormSummaryText());
-        System.out.println("T = "+multiSummary.getThirdFormTruthDegree());
+        //MultiSubjectSummary multiSummary = new MultiSubjectSummary(quantifier,null, summarizers, subjects1, subjects2,"PIŁKARZE");
+        //System.out.println("Fourth: "+multiSummary.getFourthFormSummaryText());
+        //System.out.println("T = "+multiSummary.getFourthFormTruthDegree());
         //System.out.println("Second: "+multiSummary.getSecondFormSummaryText());
         //System.out.println("Third: "+multiSummary.getThirdFormSummaryText());
         //System.out.println(multiSummary.getSecondFormTruthDegree());
 
-        //Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
-        //System.out.println(summary.getSummaryText());
-        //System.out.println(summary.getQualitiesText());
+        Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
+        System.out.println(summary.getSummaryText());
+        System.out.println(summary.getQualitiesText());
     }
 }

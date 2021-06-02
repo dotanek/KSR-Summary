@@ -91,8 +91,20 @@ public class MultiSubjectSummary {
     }
 
     public double getFourthFormTruthDegree() {
-        System.out.println("Fourth form.");
-        return 0.0;
+        double membershipNominator = 0.0;
+        double membershipDenominator = 0.0;
+
+        for (Subject subject : subjects1) {
+            double membership = LinguisticVariable.getIntersectionMembership(subject,summarizers);
+            membershipNominator += membership;
+            membershipDenominator += membership;
+        }
+
+        for (Subject subject : subjects2) {
+            membershipDenominator += LinguisticVariable.getIntersectionMembership(subject,summarizers);
+        }
+
+        return membershipNominator / membershipDenominator;
     }
 
     public String getFirstFormSummaryText() {
@@ -168,6 +180,22 @@ public class MultiSubjectSummary {
         stringBuilder.append(" SĄ/MAJĄ ");
         stringBuilder.append(summarizers.get(0).getName());
 
+        for (int i = 1; i < summarizers.size(); i++) {
+            stringBuilder.append(" ORAZ ");
+            stringBuilder.append(summarizers.get(i).getName());
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public String getFourthFormSummaryText() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("WIĘCEJ " + subjectName + " Z " + subjects1.get(0).getBonusAttribute());
+        stringBuilder.append(" NIŻ " + subjectName + " Z " + subjects2.get(0).getBonusAttribute());
+
+        stringBuilder.append(" SĄ/MAJĄ ");
+        stringBuilder.append(summarizers.get(0).getName());
 
         for (int i = 1; i < summarizers.size(); i++) {
             stringBuilder.append(" ORAZ ");

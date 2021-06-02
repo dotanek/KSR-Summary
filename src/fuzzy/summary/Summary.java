@@ -65,8 +65,7 @@ public class Summary {
 
     public double getImprecisionDegree() {
         double fuzziness = 1.0;
-        for (Label summarizer : summarizers) { // Should I count qualifiers as well?
-
+        for (Label summarizer : summarizers) {
             fuzziness *= summarizer.getFuzziness();
         }
         return 1 - Math.pow(fuzziness,1 / (double)summarizers.size());
@@ -169,7 +168,7 @@ public class Summary {
 
     public double getQualifierImprecisionDegree() {
         if (qualifiers == null || qualifiers.size() == 0) {
-            return 1.0;
+            return 0.0;
         }
 
         double imprecision = 1.0;
