@@ -15,23 +15,92 @@ import javafx.stage.Stage;
 import org.json.JSONObject;
 import subject.Subject;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
+    static List<LinguisticVariable> linguisticVariables;
+    static List<Quantifier> absoluteQuantifiers;
+    static List<Quantifier> relativeQuantifiers;
+    static List<Subject> subjects;
+    static SummaryGenerator summaryGenerator;
+    static List<Label> summarizers;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        /*
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 1000, 600));
         primaryStage.show();
-        */
+    }
+
+    public static ArrayList<String> getLinguisticVariableNames() {
+        ArrayList<String> result = new ArrayList<>();
+        for(LinguisticVariable variable : linguisticVariables) {
+            result.add(variable.getName());
+        }
+        return result;
+    }
+
+    public static ArrayList<String> getLabelNames() {
+        ArrayList<String> result = new ArrayList<>();
+        for(LinguisticVariable variable : linguisticVariables) {
+            List<Label> labels = variable.getLabels();
+            for(Label label : labels) {
+                result.add(label.getName());
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<String> getLabelNames(String linguisticVariableName) {
+        ArrayList<String> result = new ArrayList<>();
+        for(LinguisticVariable variable : linguisticVariables) {
+            if(!variable.getName().equals(linguisticVariableName)) {
+                continue;
+            }
+            List<Label> labels = variable.getLabels();
+            for(Label label : labels) {
+                result.add(label.getName());
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<String> getQuantifierNames(String type) {
+        if(!type.equals("absolute") && !type.equals("relative")) {
+            return null;
+        }
+        ArrayList<String> result = new ArrayList<>();
+        List<Quantifier> quantifiers;
+        quantifiers = type.equals("absolute") ? absoluteQuantifiers : relativeQuantifiers;
+        for(Quantifier quantifier : quantifiers) {
+            result.add(quantifier.getName());
+        }
+        return result;
+    }
+
+    public static Result generateSummary(String quantifierName, String summarizerName) {
+        Quantifier quantifier = summaryGenerator.getQuantifier(quantifierName);
+        summarizers.add(summaryGenerator.getLabel(summarizerName));
+        Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
+        ArrayList<Double> qualitiesArray = summary.getQualitiesArray();
+        Result result = new Result(
+                summary.getSummaryText(), qualitiesArray.get(0), qualitiesArray.get(1), qualitiesArray.get(2),
+                qualitiesArray.get(3), qualitiesArray.get(4), qualitiesArray.get(5), qualitiesArray.get(6),
+                qualitiesArray.get(7), qualitiesArray.get(8), qualitiesArray.get(9), qualitiesArray.get(10),
+                qualitiesArray.get(11)
+        );
+        return result;
     }
 
     public static void main(String[] args){
-        //launch(args);
         String dataPath = System.getProperty("user.dir") + "\\data";
         DataLoader dataLoader = new DataLoader(dataPath);
         JSONObject jsonParams = dataLoader.loadMembershipParams();
@@ -39,12 +108,12 @@ public class Main extends Application {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         databaseConnection.connect();
 
-        List<LinguisticVariable> linguisticVariables = DataInitialization.initializeLinguisticVariables(jsonParams);
-        List<Quantifier> absoluteQuantifiers = DataInitialization.initializeAbsoluteQuantifiers(jsonParams);
-        List<Quantifier> relativeQuantifiers = DataInitialization.initializeRelativeQuantifiers(jsonParams);
-        List<Subject> subjects = databaseConnection.getSubjects();
+        linguisticVariables = DataInitialization.initializeLinguisticVariables(jsonParams);
+        absoluteQuantifiers = DataInitialization.initializeAbsoluteQuantifiers(jsonParams);
+        relativeQuantifiers = DataInitialization.initializeRelativeQuantifiers(jsonParams);
+        subjects = databaseConnection.getSubjects();
 
-        SummaryGenerator summaryGenerator = new SummaryGenerator(
+        summaryGenerator = new SummaryGenerator(
                 linguisticVariables,
                 absoluteQuantifiers,
                 relativeQuantifiers,
@@ -57,7 +126,7 @@ public class Main extends Application {
 
 
         List<Label> qualifiers = new ArrayList<>();
-        List<Label> summarizers = new ArrayList<>();
+        summarizers = new ArrayList<>();
 
         //Quantifier quantifier = summaryGenerator.getQuantifier("OKOŁO 5 TYSIĘCY");
         //summarizers.add(summaryGenerator.getLabel("W ŚREDNIM WIEKU"));
@@ -68,8 +137,8 @@ public class Main extends Application {
         //Quantifier quantifier = summaryGenerator.getQuantifier("PRAWIE NIKT");
         //summarizers.add(summaryGenerator.getLabel("WSPANIAŁY"));
 
-        Quantifier quantifier = summaryGenerator.getQuantifier("WIĘKSZOŚĆ");
-        summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
+//        Quantifier quantifier = summaryGenerator.getQuantifier("WIĘKSZOŚĆ");
+//        summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
 
         //Quantifier quantifier = summaryGenerator.getQuantifier("MNIEJSZOŚĆ");
         //summarizers.add(summaryGenerator.getLabel("PRZECIĘTNIE WYSOKI"));
@@ -109,8 +178,9 @@ public class Main extends Application {
         //System.out.println("Third: "+multiSummary.getThirdFormSummaryText());
         //System.out.println(multiSummary.getSecondFormTruthDegree());
 
-        Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
-        System.out.println(summary.getSummaryText());
-        System.out.println(summary.getQualitiesText());
+//        Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
+//        System.out.println(summary.getSummaryText());
+//        System.out.println(summary.getQualitiesText());
+        launch(args);
     }
 }

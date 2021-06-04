@@ -265,4 +265,21 @@ public class Summary {
         stringBuilder.append("T11 = " + round(getQualifierLength())+", ");
         return stringBuilder.toString();
     }
+
+    public ArrayList<Double> getQualitiesArray() {
+        ArrayList<Double> result = new ArrayList<Double>();
+        result.add(round(getOptimalSummaryDegree()));
+        result.add(round(getTruthDegree()));
+        result.add(round(getImprecisionDegree()));
+        result.add(round(getCoverageDegree()));
+        result.add(round(getAppropriatenessDegree()));
+        result.add(round(getSummaryLength()));
+        result.add(round(getQuantifierImprecisionDegree()));
+        result.add(round(getQuantifierCardinalityDegree()));
+        result.add(round(getSummarizerCardinalityDegree()));
+        result.add(round(getQualifierImprecisionDegree()));
+        result.add(round(getQualifierCardinalityDegree()));
+        result.add(round(getQualifierLength()));
+        return result;
+    }
 }
