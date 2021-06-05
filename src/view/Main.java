@@ -31,6 +31,7 @@ public class Main extends Application {
     static List<Subject> subjects;
     static SummaryGenerator summaryGenerator;
     static List<Label> summarizers;
+    static List<Label> qualifiers;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -86,10 +87,27 @@ public class Main extends Application {
         return result;
     }
 
-    public static Result generateSummary(String quantifierName, String summarizerName) {
+    public static Result generateSummary(String quantifierName, ArrayList<String> summarizerNames,
+                                         ArrayList<String> qualifierNames, ArrayList<Double> weights,
+                                         String firstChosenSubject, String secondChosenSubject) {
+        if(!firstChosenSubject.isEmpty() && !secondChosenSubject.isEmpty()) {
+            // Wielopodmiotowe
+        }
         Quantifier quantifier = summaryGenerator.getQuantifier(quantifierName);
-        summarizers.add(summaryGenerator.getLabel(summarizerName));
-        Summary summary = new Summary(quantifier,null,summarizers,subjects,"PIŁKARZE");
+        summarizers = new ArrayList<>();
+        for(String name : summarizerNames) {
+            summarizers.add(summaryGenerator.getLabel(name));
+        }
+        qualifiers = new ArrayList<>();
+        for(String name : qualifierNames) {
+            qualifiers.add(summaryGenerator.getLabel(name));
+        }
+        if(qualifiers.size() == 0) {
+            qualifiers = null;
+        }
+
+        // Dodać ustawianie wag
+        Summary summary = new Summary(quantifier,qualifiers,summarizers,subjects,"PIŁKARZE");
         ArrayList<Double> qualitiesArray = summary.getQualitiesArray();
         Result result = new Result(
                 summary.getSummaryText(), qualitiesArray.get(0), qualitiesArray.get(1), qualitiesArray.get(2),
@@ -125,7 +143,7 @@ public class Main extends Application {
 
 
 
-        List<Label> qualifiers = new ArrayList<>();
+        qualifiers = new ArrayList<>();
         summarizers = new ArrayList<>();
 
         //Quantifier quantifier = summaryGenerator.getQuantifier("OKOŁO 5 TYSIĘCY");

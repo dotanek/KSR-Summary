@@ -56,7 +56,9 @@ public class MultiSubjectSummary {
 
         List<Label> all = new ArrayList<>();
         all.addAll(summarizers);
-        all.addAll(qualifiers);
+        if(qualifiers != null) {
+            all.addAll(qualifiers);
+        }
 
         for (Subject subject : subjects2) {
             sCountSubjects2 += LinguisticVariable.getIntersectionMembership(subject,all);
