@@ -11,7 +11,6 @@ import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -29,7 +28,7 @@ public class Controller implements Initializable {
     private final ObservableList<Result> results = FXCollections.observableArrayList();
 
     private final ArrayList<ArrayList<String>> allQualifierSummarizerLabelNames = new ArrayList<>();
-    private final ArrayList<String> chosenQualifierSummarizerNames = new ArrayList<>();
+    private final ArrayList<String> chosenQualifierNames = new ArrayList<>();
     private int numberOfQualifiers = 0;
     private final ObservableList<ChoiceBox<String>> qualifierLinguisticVariableChoiceBoxes = FXCollections.observableArrayList();
     private final ObservableList<ChoiceBox<String>> qualifierSummarizerChoiceBoxes = FXCollections.observableArrayList();
@@ -113,7 +112,7 @@ public class Controller implements Initializable {
         absoluteRadioButton.setOnAction(this::onAbsoluteSelected);
         relativeRadioButton.setOnAction(this::onRelativeSelected);
 
-        addSummarizerPanel();
+        addSummarizer();
 
         generateButton.setOnAction(this::onGenerate);
 
@@ -133,12 +132,12 @@ public class Controller implements Initializable {
 
         tableView.setItems(results);
 
-        addSummarizerButton.setOnAction((event -> addSummarizerPanel()));
-        removeSummarizerButton.setOnAction((event -> removeSummarizerPanel()));
+        addSummarizerButton.setOnAction((event -> addSummarizer()));
+        removeSummarizerButton.setOnAction((event -> removeSummarizer()));
         removeSummarizerButton.setDisable(true);
 
-        addQualifierButton.setOnAction((event -> addQualifierPanel()));
-        removeQualifierButton.setOnAction((event -> removeQualifierPanel()));
+        addQualifierButton.setOnAction((event -> addQualifier()));
+        removeQualifierButton.setOnAction((event -> removeQualifier()));
         removeQualifierButton.setDisable(true);
 
         textField.setText("1;1;1;1;1;1;1;1;1;1;1");
@@ -219,12 +218,12 @@ public class Controller implements Initializable {
         qualifierSummarizerChoiceBox.getSelectionModel().select(0);
         qualifierSummarizerChoiceBoxes.set(index, qualifierSummarizerChoiceBox);
         allQualifierSummarizerLabelNames.set(index, qualifierSummarizerLabelNames);
-        onQualifierSummarizerSelected(null, index);
+        onQualifierSelected(null, index);
     }
 
-    public void onQualifierSummarizerSelected(ActionEvent event, int index) {
+    public void onQualifierSelected(ActionEvent event, int index) {
         ChoiceBox<String> qualifierSummarizerChoiceBox = qualifierSummarizerChoiceBoxes.get(index);
-        chosenQualifierSummarizerNames.set(index, qualifierSummarizerChoiceBox.getValue());
+        chosenQualifierNames.set(index, qualifierSummarizerChoiceBox.getValue());
     }
 
     public void onQuantifierTypeChanged(String newType) {
@@ -266,11 +265,11 @@ public class Controller implements Initializable {
 
         // Generate result
         Result result = Main.generateSummary(chosenQuantifierName, chosenSummarizerNames,
-                chosenQualifierSummarizerNames, weights, firstChosenSubject, secondChosenSubject, chosenForm);
+                chosenQualifierNames, weights, firstChosenSubject, secondChosenSubject, chosenForm);
         results.add(result);
     }
 
-    private void addSummarizerPanel() {
+    private void addSummarizer() {
         allSummarizerLabelNames.add(new ArrayList<>());
         chosenSummarizerNames.add("");
 
@@ -318,7 +317,7 @@ public class Controller implements Initializable {
         removeSummarizerButton.setDisable(false);
     }
 
-    public void removeSummarizerPanel() {
+    public void removeSummarizer() {
         int index = numberOfSummarizers - 1;
         allSummarizerLabelNames.remove(index);
         chosenSummarizerNames.remove(index);
@@ -336,9 +335,9 @@ public class Controller implements Initializable {
         }
     }
 
-    private void addQualifierPanel() {
+    private void addQualifier() {
         allQualifierSummarizerLabelNames.add(new ArrayList<>());
-        chosenQualifierSummarizerNames.add("");
+        chosenQualifierNames.add("");
 
         Label linguisticVariableLabel = new Label();
         linguisticVariableLabel.setText((numberOfQualifiers + 1) + ". Zmienna lingwistyczna");
@@ -369,12 +368,12 @@ public class Controller implements Initializable {
         summarizerChoiceBox.setTranslateY(90 + numberOfQualifiers * 140);
         //summarizerChoiceBox.getItems().addAll(linguisticVariables);
         summarizerChoiceBox.getSelectionModel().select(0);
-        summarizerChoiceBox.setOnAction((event -> onQualifierSummarizerSelected(event, finalNr)));
+        summarizerChoiceBox.setOnAction((event -> onQualifierSelected(event, finalNr)));
         qualifierSummarizerChoiceBoxes.add(summarizerChoiceBox);
         qualifierMainPane.getChildren().add(qualifierSummarizerChoiceBoxes.get(numberOfQualifiers));
 
         onQualifierLinguisticVariableSelected(null, numberOfQualifiers);
-        onQualifierSummarizerSelected(null, numberOfQualifiers);
+        onQualifierSelected(null, numberOfQualifiers);
 
         int height = 120 + numberOfQualifiers * 140;
         qualifierMainPane.setPrefHeight(Math.max(height, 250));
@@ -384,10 +383,10 @@ public class Controller implements Initializable {
         removeQualifierButton.setDisable(false);
     }
 
-    public void removeQualifierPanel() {
+    public void removeQualifier() {
         int index = numberOfQualifiers - 1;
         allQualifierSummarizerLabelNames.remove(index);
-        chosenQualifierSummarizerNames.remove(index);
+        chosenQualifierNames.remove(index);
         qualifierLinguisticVariableChoiceBoxes.remove(index);
         qualifierSummarizerChoiceBoxes.remove(index);
         int numberOfChildren = qualifierMainPane.getChildren().size();
