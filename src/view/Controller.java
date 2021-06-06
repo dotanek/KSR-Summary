@@ -35,7 +35,8 @@ public class Controller implements Initializable {
     private final ObservableList<ChoiceBox<String>> qualifierSummarizerChoiceBoxes = FXCollections.observableArrayList();
     private final Pane qualifierMainPane = new Pane();
 
-    private ArrayList<String> countryList = new ArrayList<>();
+    private final ArrayList<String> countryList = new ArrayList<>();
+    private final ArrayList<String> formList = new ArrayList<>();
 
     @FXML
     private RadioButton absoluteRadioButton;
@@ -101,6 +102,8 @@ public class Controller implements Initializable {
     private ChoiceBox<String> firstSubjectChoicebox;
     @FXML
     private ChoiceBox<String> secondSubjectChoicebox;
+    @FXML
+    private ChoiceBox<String> formChoicebox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -140,32 +143,32 @@ public class Controller implements Initializable {
 
         textField.setText("1;1;1;1;1;1;1;1;1;1;1");
 
-        countryList.add("England");
-        countryList.add("Germany");
-        countryList.add("Spain");
-        countryList.add("Argentina");
-        countryList.add("France");
-        countryList.add("Brazil");
-        countryList.add("Italy");
-        countryList.add("Colombia");
-        countryList.add("Japan");
-        countryList.add("Netherlands");
-        countryList.add("Sweden");
-        countryList.add("China PR");
-        countryList.add("Chile");
-        countryList.add("Republic of Ireland");
-        countryList.add("Mexico");
-        countryList.add("United States");
-        countryList.add("Poland");
-        countryList.add("Norway");
-        countryList.add("Saudi Arabia");
-        countryList.add("Denmark");
-        countryList.add("Korea Republic");
-        countryList.add("Portugal");
-        countryList.add("Turkey");
-        countryList.add("Austria");
-        countryList.add("Scotland");
-        countryList.add("Belguim");
+        countryList.add("ENGLAND");
+        countryList.add("GERMANY");
+        countryList.add("SPAIN");
+        countryList.add("ARGENTINA");
+        countryList.add("FRANCE");
+        countryList.add("BRAZIL");
+        countryList.add("ITALY");
+        countryList.add("COLOMBIA");
+        countryList.add("JAPAN");
+        countryList.add("NETHERLANDS");
+        countryList.add("SWEDEN");
+        countryList.add("CHINA PR");
+        countryList.add("CHILE");
+        countryList.add("REPUBLIC OF IRELAND");
+        countryList.add("MEXICO");
+        countryList.add("UNITED STATES");
+        countryList.add("POLAND");
+        countryList.add("NORWAY");
+        countryList.add("SAUDI ARABIA");
+        countryList.add("DENMARK");
+        countryList.add("KOREA REPUBLIC");
+        countryList.add("PORTUGAL");
+        countryList.add("TURKEY");
+        countryList.add("AUSTRIA");
+        countryList.add("SCOTLAND");
+        countryList.add("BELGIUM");
 
         firstSubjectChoicebox.getItems().addAll(countryList);
         firstSubjectChoicebox.getSelectionModel().select(0);
@@ -174,6 +177,14 @@ public class Controller implements Initializable {
         firstSubjectChoicebox.setDisable(true);
         secondSubjectChoicebox.setDisable(true);
         multiSubjectCheckbox.setOnAction(this::onMultiCheckboxChanged);
+
+        formList.add("Pierwsza forma");
+        formList.add("Druga forma");
+        formList.add("Trzecia forma");
+        formList.add("Czwarta forma");
+        formChoicebox.getItems().addAll(formList);
+        formChoicebox.getSelectionModel().select(0);
+        formChoicebox.setDisable(true);
     }
 
     public void onLinguisticVariableSelected(ActionEvent event, int index) {
@@ -239,9 +250,11 @@ public class Controller implements Initializable {
         // Multi subject
         String firstChosenSubject = "";
         String secondChosenSubject = "";
+        int chosenForm = -1;
         if(multiSubjectCheckbox.isSelected()) {
             firstChosenSubject = firstSubjectChoicebox.getValue();
             secondChosenSubject = secondSubjectChoicebox.getValue();
+            chosenForm = formChoicebox.getSelectionModel().getSelectedIndex() + 1;
         }
 
         // Weights
@@ -253,7 +266,7 @@ public class Controller implements Initializable {
 
         // Generate result
         Result result = Main.generateSummary(chosenQuantifierName, chosenSummarizerNames,
-                chosenQualifierSummarizerNames, weights, firstChosenSubject, secondChosenSubject);
+                chosenQualifierSummarizerNames, weights, firstChosenSubject, secondChosenSubject, chosenForm);
         results.add(result);
     }
 
@@ -393,10 +406,16 @@ public class Controller implements Initializable {
         if(multiSubjectCheckbox.isSelected()) {
             firstSubjectChoicebox.setDisable(false);
             secondSubjectChoicebox.setDisable(false);
+            formChoicebox.setDisable(false);
+            relativeRadioButton.setSelected(true);
+            absoluteRadioButton.setDisable(true);
+            onRelativeSelected(null);
         }
         else {
             firstSubjectChoicebox.setDisable(true);
             secondSubjectChoicebox.setDisable(true);
+            formChoicebox.setDisable(true);
+            absoluteRadioButton.setDisable(false);
         }
     }
 }

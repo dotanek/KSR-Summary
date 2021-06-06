@@ -15,6 +15,7 @@ public class Summary {
     private List<Label> summarizers;
     private List<Subject> subjects;
     private String subjectName;
+    private List<Double> weights;
 
     public Summary(Quantifier quantifier, List<Label> qualifiers, List<Label> summarizers, List<Subject> subjects, String subjectName) {
         this.quantifier = quantifier;
@@ -22,6 +23,16 @@ public class Summary {
         this.summarizers = summarizers;
         this.subjects = subjects;
         this.subjectName = subjectName;
+    }
+
+    public Summary(Quantifier quantifier, List<Label> qualifiers, List<Label> summarizers, List<Subject> subjects,
+                   String subjectName, ArrayList<Double> weights) {
+        this.quantifier = quantifier;
+        this.qualifiers = qualifiers;
+        this.summarizers = summarizers;
+        this.subjects = subjects;
+        this.subjectName = subjectName;
+        this.weights = weights;
     }
 
     public double getTruthDegree() {
@@ -201,20 +212,27 @@ public class Summary {
     }
 
     public double getOptimalSummaryDegree() {
-        double weightTruth = 0.5;
-        double weightRest = (1 - weightTruth) / 10;
+        // double weightTruth = 0.5;
+        // double weightRest = (1 - weightTruth) / 10;
+        double sumOfWeights = 0;
+        for(double weight : this.weights) {
+            sumOfWeights += weight;
+        }
+        for(int i = 0; i < this.weights.size(); i++) {
+            this.weights.set(i, this.weights.get(i) / sumOfWeights);
+        }
         double degree = 0.0;
-        degree += getTruthDegree() * weightTruth; // T1
-        degree += getImprecisionDegree() * weightRest; // T2
-        degree += getCoverageDegree() * weightRest; // T3
-        degree += getAppropriatenessDegree() * weightRest; // T4
-        degree += getSummaryLength() * weightRest; // T5
-        degree += getQuantifierImprecisionDegree() * weightRest; // T6
-        degree += getQuantifierCardinalityDegree() * weightRest; // T7
-        degree += getSummarizerCardinalityDegree() * weightRest; // T8
-        degree += getQualifierImprecisionDegree()* weightRest; // T9
-        degree += getQualifierCardinalityDegree()* weightRest; // T10
-        degree += getQualifierLength()* weightRest; // T11
+        degree += getTruthDegree() * this.weights.get(0); // weightTruth; // T1
+        degree += getImprecisionDegree() * this.weights.get(1); // weightRest; // T2
+        degree += getCoverageDegree() * this.weights.get(2); // weightRest; // T3
+        degree += getAppropriatenessDegree() * this.weights.get(3); // weightRest; // T4
+        degree += getSummaryLength() * this.weights.get(4); // weightRest; // T5
+        degree += getQuantifierImprecisionDegree() * this.weights.get(5); // weightRest; // T6
+        degree += getQuantifierCardinalityDegree() * this.weights.get(6); // weightRest; // T7
+        degree += getSummarizerCardinalityDegree() * this.weights.get(7); // weightRest; // T8
+        degree += getQualifierImprecisionDegree() * this.weights.get(8); // weightRest; // T9
+        degree += getQualifierCardinalityDegree() * this.weights.get(9); // weightRest; // T10
+        degree += getQualifierLength() * this.weights.get(10); // weightRest; // T11
         return degree;
     }
 

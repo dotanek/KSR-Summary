@@ -27,6 +27,10 @@ public class MultiSubjectSummary {
         this.subjectName = subjectName;
     }
 
+    private double round(double value) {
+        return Math.round(value * 100.0) / 100.0;
+    }
+
     public double getFirstFormTruthDegree() {
         double sCountSubjects1 = 0.0;
         double sCountSubjects2 = 0.0;
@@ -42,7 +46,8 @@ public class MultiSubjectSummary {
 
         sCountSubjects2 /= (double) subjects2.size();
 
-        return quantifier.getMembership(sCountSubjects1 / (sCountSubjects1 + sCountSubjects2));
+        double result = quantifier.getMembership(sCountSubjects1 / (sCountSubjects1 + sCountSubjects2));
+        return round(result);
     }
 
     public double getSecondFormTruthDegree() {
@@ -66,7 +71,8 @@ public class MultiSubjectSummary {
 
         sCountSubjects2 /= (double) subjects2.size();
 
-        return quantifier.getMembership(sCountSubjects1 / (sCountSubjects1 + sCountSubjects2));
+        double result = quantifier.getMembership(sCountSubjects1 / (sCountSubjects1 + sCountSubjects2));
+        return round(result);
     }
 
     public double getThirdFormTruthDegree() {
@@ -89,7 +95,8 @@ public class MultiSubjectSummary {
 
         sCountSubjects2 /= (double) subjects2.size();
 
-        return quantifier.getMembership(sCountSubjects1 / (sCountSubjects1 + sCountSubjects2));
+        double result = quantifier.getMembership(sCountSubjects1 / (sCountSubjects1 + sCountSubjects2));
+        return round(result);
     }
 
     public double getFourthFormTruthDegree() {
@@ -106,7 +113,8 @@ public class MultiSubjectSummary {
             membershipDenominator += LinguisticVariable.getIntersectionMembership(subject,summarizers);
         }
 
-        return membershipNominator / membershipDenominator;
+        double result = membershipNominator / membershipDenominator;
+        return round(result);
     }
 
     public String getFirstFormSummaryText() {

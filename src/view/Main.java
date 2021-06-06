@@ -32,12 +32,14 @@ public class Main extends Application {
     static SummaryGenerator summaryGenerator;
     static List<Label> summarizers;
     static List<Label> qualifiers;
+    static List<Subject> subjects1;
+    static List<Subject> subjects2;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 1000, 600));
+        primaryStage.setScene(new Scene(root, 1300, 600));
         primaryStage.show();
     }
 
@@ -89,32 +91,57 @@ public class Main extends Application {
 
     public static Result generateSummary(String quantifierName, ArrayList<String> summarizerNames,
                                          ArrayList<String> qualifierNames, ArrayList<Double> weights,
-                                         String firstChosenSubject, String secondChosenSubject) {
-        if(!firstChosenSubject.isEmpty() && !secondChosenSubject.isEmpty()) {
-            // Wielopodmiotowe
-        }
-        Quantifier quantifier = summaryGenerator.getQuantifier(quantifierName);
+                                         String firstChosenSubject, String secondChosenSubject, int chosenForm) {
         summarizers = new ArrayList<>();
-        for(String name : summarizerNames) {
+        for (String name : summarizerNames) {
             summarizers.add(summaryGenerator.getLabel(name));
         }
         qualifiers = new ArrayList<>();
-        for(String name : qualifierNames) {
+        for (String name : qualifierNames) {
             qualifiers.add(summaryGenerator.getLabel(name));
         }
-        if(qualifiers.size() == 0) {
-            qualifiers = null;
-        }
+        Result result;
 
-        // Dodać ustawianie wag
-        Summary summary = new Summary(quantifier,qualifiers,summarizers,subjects,"PIŁKARZE");
-        ArrayList<Double> qualitiesArray = summary.getQualitiesArray();
-        Result result = new Result(
-                summary.getSummaryText(), qualitiesArray.get(0), qualitiesArray.get(1), qualitiesArray.get(2),
-                qualitiesArray.get(3), qualitiesArray.get(4), qualitiesArray.get(5), qualitiesArray.get(6),
-                qualitiesArray.get(7), qualitiesArray.get(8), qualitiesArray.get(9), qualitiesArray.get(10),
-                qualitiesArray.get(11)
-        );
+        // Wielopodmiotowe
+        if(!firstChosenSubject.isEmpty() && !secondChosenSubject.isEmpty() && chosenForm > 0) {
+            subjects1 = Subject.getSubjects(subjects,firstChosenSubject);
+            subjects2 = Subject.getSubjects(subjects,secondChosenSubject);
+            RelativeQuantifier relativeQuantifier = (RelativeQuantifier) summaryGenerator.getQuantifier(quantifierName);
+
+            MultiSubjectSummary multiSummary = new MultiSubjectSummary
+                    (relativeQuantifier, qualifiers, summarizers, subjects1, subjects2,"PIŁKARZE");
+            String resultText = "";
+            double resultTruthDegree = 0;
+            if(chosenForm == 1) {
+                resultText = multiSummary.getFirstFormSummaryText();
+                resultTruthDegree = multiSummary.getFirstFormTruthDegree();
+            }
+            if(chosenForm == 2) {
+                resultText = multiSummary.getSecondFormSummaryText();
+                resultTruthDegree = multiSummary.getSecondFormTruthDegree();
+            }
+            if(chosenForm == 3) {
+                resultText = multiSummary.getThirdFormSummaryText();
+                resultTruthDegree = multiSummary.getThirdFormTruthDegree();
+            }
+            if(chosenForm == 4) {
+                resultText = multiSummary.getFourthFormSummaryText();
+                resultTruthDegree = multiSummary.getFourthFormTruthDegree();
+            }
+            result = new Result(resultText, resultTruthDegree);
+        }
+        // Zwykłe
+        else {
+            Quantifier quantifier = summaryGenerator.getQuantifier(quantifierName);
+            Summary summary = new Summary(quantifier, qualifiers, summarizers, subjects, "PIŁKARZE", weights);
+            ArrayList<Double> qualitiesArray = summary.getQualitiesArray();
+            result = new Result(
+                    summary.getSummaryText(), qualitiesArray.get(0), qualitiesArray.get(1), qualitiesArray.get(2),
+                    qualitiesArray.get(3), qualitiesArray.get(4), qualitiesArray.get(5), qualitiesArray.get(6),
+                    qualitiesArray.get(7), qualitiesArray.get(8), qualitiesArray.get(9), qualitiesArray.get(10),
+                    qualitiesArray.get(11)
+            );
+        }
         return result;
     }
 
@@ -138,9 +165,8 @@ public class Main extends Application {
                 subjects
         );
 
-        List<Subject> subjects2 = Subject.getSubjects(subjects,"ARGENTINA");
-        List<Subject> subjects1 = Subject.getSubjects(subjects,"KOREA REPUBLIC");
-
+        subjects1 = Subject.getSubjects(subjects,"KOREA REPUBLIC");
+        subjects2 = Subject.getSubjects(subjects,"ARGENTINA");
 
 
         qualifiers = new ArrayList<>();

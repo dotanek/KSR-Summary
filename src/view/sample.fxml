@@ -12,21 +12,21 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
    <children>
       <Label layoutX="151.0" layoutY="16.0" text="Kwantyfikator" />
-      <ScrollPane fx:id="scrollPane" layoutX="677.0" layoutY="15.0" maxHeight="250.0" prefWidth="298.0" />
-      <RadioButton fx:id="absoluteRadioButton" layoutX="99.0" layoutY="61.0" mnemonicParsing="false" selected="true" text="Absolutny">
+      <ScrollPane fx:id="scrollPane" layoutX="951.0" layoutY="14.0" maxHeight="250.0" prefWidth="298.0" />
+      <RadioButton fx:id="absoluteRadioButton" layoutX="101.0" layoutY="43.0" mnemonicParsing="false" selected="true" text="Absolutny">
          <toggleGroup>
             <ToggleGroup fx:id="quantifierType" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="relativeRadioButton" layoutX="200.0" layoutY="61.0" mnemonicParsing="false" text="Relatywny" toggleGroup="$quantifierType" />
-      <ChoiceBox fx:id="quantifierChoicebox" layoutX="57.0" layoutY="103.0" prefWidth="260.0" />
-      <Button fx:id="generateButton" layoutX="471.0" layoutY="341.0" mnemonicParsing="false" text="Generuj" />
-      <TableView fx:id="tableView" layoutX="39.0" layoutY="386.0" prefHeight="200.0" prefWidth="921.0">
+      <RadioButton fx:id="relativeRadioButton" layoutX="198.0" layoutY="43.0" mnemonicParsing="false" text="Relatywny" toggleGroup="$quantifierType" />
+      <ChoiceBox fx:id="quantifierChoicebox" layoutX="57.0" layoutY="73.0" prefWidth="260.0" />
+      <Button fx:id="generateButton" layoutX="621.0" layoutY="346.0" mnemonicParsing="false" text="Generuj" />
+      <TableView fx:id="tableView" layoutX="50.0" layoutY="386.0" prefHeight="200.0" prefWidth="1200.0">
         <columns>
-          <TableColumn fx:id="summaryCol" prefWidth="410.0" text="Podsumowanie" />
+          <TableColumn fx:id="summaryCol" prefWidth="700.0" text="Podsumowanie" />
           <TableColumn fx:id="t1Col" minWidth="0.0" prefWidth="38.0" text="T1" />
             <TableColumn fx:id="t2Col" prefWidth="38.0" text="T2" />
             <TableColumn fx:id="t3Col" prefWidth="38.0" text="T3" />
@@ -41,15 +41,16 @@
             <TableColumn fx:id="tCol" prefWidth="75.0" text="Optym." />
         </columns>
       </TableView>
-      <Button fx:id="addSummarizerButton" layoutX="835.0" layoutY="274.0" mnemonicParsing="false" text="Dodaj sumaryzator" />
-      <Button fx:id="removeSummarizerButton" layoutX="702.0" layoutY="274.0" mnemonicParsing="false" text="Usuń sumaryzator" />
-      <ScrollPane fx:id="qualifierScrollPane" layoutX="344.0" layoutY="14.0" maxHeight="250.0" prefWidth="312.0" />
-      <Button fx:id="addQualifierButton" layoutX="509.0" layoutY="274.0" mnemonicParsing="false" text="Dodaj kwalifikator" />
-      <Button fx:id="removeQualifierButton" layoutX="376.0" layoutY="274.0" mnemonicParsing="false" text="Usuń kwalifikator" />
+      <Button fx:id="addSummarizerButton" layoutX="1109.0" layoutY="273.0" mnemonicParsing="false" text="Dodaj sumaryzator" />
+      <Button fx:id="removeSummarizerButton" layoutX="976.0" layoutY="273.0" mnemonicParsing="false" text="Usuń sumaryzator" />
+      <ScrollPane fx:id="qualifierScrollPane" layoutX="494.0" layoutY="13.0" maxHeight="250.0" prefWidth="312.0" />
+      <Button fx:id="addQualifierButton" layoutX="659.0" layoutY="273.0" mnemonicParsing="false" text="Dodaj kwalifikator" />
+      <Button fx:id="removeQualifierButton" layoutX="526.0" layoutY="273.0" mnemonicParsing="false" text="Usuń kwalifikator" />
       <TextField fx:id="textField" layoutX="56.0" layoutY="273.0" prefHeight="26.0" prefWidth="260.0" />
       <Label layoutX="130.0" layoutY="245.0" text="Wagi dla miar jakości" />
-      <ChoiceBox fx:id="firstSubjectChoicebox" layoutX="36.0" layoutY="191.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="secondSubjectChoicebox" layoutX="187.0" layoutY="191.0" prefWidth="150.0" />
-      <CheckBox fx:id="multiSubjectCheckbox" layoutX="86.0" layoutY="159.0" mnemonicParsing="false" text="Podsumowanie wielopodmiotowe" />
+      <ChoiceBox fx:id="firstSubjectChoicebox" layoutX="39.0" layoutY="156.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="secondSubjectChoicebox" layoutX="187.0" layoutY="156.0" prefWidth="150.0" />
+      <CheckBox fx:id="multiSubjectCheckbox" layoutX="86.0" layoutY="125.0" mnemonicParsing="false" text="Podsumowanie wielopodmiotowe" />
+      <ChoiceBox fx:id="formChoicebox" layoutX="112.0" layoutY="192.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

@@ -21,6 +21,11 @@ public class Result {
         this.t11 = t11;
     }
 
+    public Result(String summary, double t1) {
+        this.summary = summary;
+        this.t1 = t1;
+    }
+
     public String getSummary() {
         return summary;
     }
