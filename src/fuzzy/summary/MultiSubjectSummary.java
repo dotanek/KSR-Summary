@@ -99,11 +99,32 @@ public class MultiSubjectSummary {
         return round(result);
     }
 
+    public double getReichenbachImplication(double a, double b) {
+        return 1 - a + a * b;
+    }
+
     public double getFourthFormTruthDegree() {
         double membershipNominator = 0.0;
         double membershipDenominator = 0.0;
+        List<Subject> allSubjects = new ArrayList<>(subjects1);
+        allSubjects.addAll(subjects2);
+        List<Double> resultList = new ArrayList<>();
+        double result = 0.0;
 
-        for (Subject subject : subjects1) {
+        for(Subject subject : allSubjects) {
+            if(subjects1.contains(subject)) {
+                resultList.add(getReichenbachImplication(0, 1));
+            }
+            else {
+                resultList.add(getReichenbachImplication(1, 0));
+            }
+        }
+        for(double i : resultList) {
+            result += i;
+        }
+        result /= resultList.size();
+
+        /*for (Subject subject : subjects1) {
             double membership = LinguisticVariable.getIntersectionMembership(subject,summarizers);
             membershipNominator += membership;
             membershipDenominator += membership;
@@ -111,9 +132,9 @@ public class MultiSubjectSummary {
 
         for (Subject subject : subjects2) {
             membershipDenominator += LinguisticVariable.getIntersectionMembership(subject,summarizers);
-        }
+        }*/
 
-        double result = membershipNominator / membershipDenominator;
+        //double result = membershipNominator / membershipDenominator;
         return round(result);
     }
 
